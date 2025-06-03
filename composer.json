@@ -1,0 +1,25 @@
+{
+    "name": "triya/yandex-pay-sdk",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Triya\\YandexPaySdk\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Pelmenka",
+            "email": "kovalev_v@triya.ru",
+            "role": "Developer"
+        }
+    ],
+    "license": "MIT",
+    "description": "Yandex.Pay API SDK for PHP",
+    "require": {
+        "php": "^8.0",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "firebase/php-jwt": "^6.11"
+    },
+    "prefer-stable": true
+}
