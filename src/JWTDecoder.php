@@ -8,7 +8,7 @@ use RuntimeException;
 
 class JWTDecoder
 {
-    private array $keys = null;
+    private array $keys = [];
 
     public function __construct(private readonly bool $sandbox)
     {
