@@ -28,8 +28,9 @@ class RenderedCart extends BaseEntity
     public function addItem(RenderedCartItem $newItem)
     {
         foreach ($this->items as $item) {
-            if ($item->id === $newItem->id) {
-                $item->total += $item->total;
+            if ($item->productId === $newItem->productId) {
+                $item->total += $newItem->total;
+                $item->quantity += $newItem->quantity;
                 return;
             }
         }
