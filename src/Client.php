@@ -3,8 +3,10 @@
 namespace Triya\YandexPaySdk;
 
 use Triya\YandexPaySdk\Entity\Request\CreateOrderRequestBody;
+use Triya\YandexPaySdk\Entity\Request\RefundOrderRequestBody;
 use Triya\YandexPaySdk\Request\CreateOrderRequest;
 use Triya\YandexPaySdk\Request\GetOrderRequest;
+use Triya\YandexPaySdk\Request\RefundOrderRequest;
 use Triya\YandexPaySdk\Request\RollbackOrderRequest;
 
 class Client
@@ -35,6 +37,13 @@ class Client
         $request = new RollbackOrderRequest($this);
         $request->setMetadata($requestId, $attempt);
         return $request->send($orderId);
+    }
+
+    public function refundOrder(string $orderId, float $amount, string $requestId, int $attempt = 0)
+    {
+        $request = new RefundOrderRequest($this);
+        $request->setMetadata($requestId, $attempt);
+        return $request->send(new RefundOrderRequestBody($orderId, $amount));
     }
 
     public function getOrder(string $orderId)
