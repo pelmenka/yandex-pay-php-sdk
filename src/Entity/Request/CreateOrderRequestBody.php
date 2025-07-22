@@ -14,6 +14,7 @@ use Triya\YandexPaySdk\Entity\RenderedCart;
  * @property 'RUB' $currencyCode
  * @property string $orderId
  * @property MerchantRedirectUrls $redirectUrls
+ * @property OrderExtensions $extensions
  * @property ?array<'CARD'|'SPLIT'> $availablePaymentMethods
  * @property ?string $billingPhone
  * @property ?bool $isPrepayment
