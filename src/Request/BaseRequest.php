@@ -4,6 +4,12 @@ namespace Triya\YandexPaySdk\Request;
 
 use CurlHandle;
 use Triya\YandexPaySdk\Client;
+use Triya\YandexPaySdk\Exceptions\ApiException;
+use Triya\YandexPaySdk\Exceptions\ConnectionException;
+use Triya\YandexPaySdk\Exceptions\NotFoundException;
+use Triya\YandexPaySdk\Exceptions\ServerErrorException;
+use Triya\YandexPaySdk\Exceptions\ServiceUnavailableException;
+use Triya\YandexPaySdk\Exceptions\UnauthorizedException;
 
 abstract class BaseRequest
 {
@@ -57,12 +63,28 @@ abstract class BaseRequest
         $response = curl_exec($this->curl);
 
         if (curl_errno($this->curl) > 0) {
-            throw new \Exception(curl_error($this->curl));
+            throw new ConnectionException(curl_error($this->curl));
         }
 
-        $result = json_decode($response, flags: JSON_THROW_ON_ERROR);
+        $info = curl_getinfo($this->curl);
 
-        return $result;
+        switch ($info['http_code'] ?? 0) {
+            case 200:
+                $result = json_decode($response, flags: JSON_THROW_ON_ERROR);
+                return $result;
+            case 504:
+            case 503:
+            case 502:
+                throw new ServiceUnavailableException("service unavailable", $info['http_code'], (string) $response);
+            case 500:
+                throw new ServerErrorException("server error", $info['http_code'], (string) $response);
+            case 401:
+                throw new UnauthorizedException("unauthorized", $info['http_code'], (string) $response);
+            case 404:
+                throw new NotFoundException("not found", $info['http_code'], (string) $response);
+            default:
+                throw new ApiException("", $info['http_code'] ?? 0, (string) $response);
+        }
     }
 
     protected function setPostContent(?string $content)
